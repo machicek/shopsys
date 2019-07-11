@@ -162,4 +162,10 @@ There you can find links to upgrade notes for other versions too.
         + $container->setParameter('shopsys.router.locale_router_filepath_mask', $config['router']['locale_router_filepath_mask']);
         ```
 
+### Infrastructure
+- remove node_version setting from `gce-cluster.tf` to make it automatically set and valid with [documentation](https://www.terraform.io/docs/providers/google/r/container_cluster.html#node_version) ([#1198](https://github.com/shopsys/shopsys/pull/1198))
+    ```diff
+    -  node_version       = "${data.google_container_engine_versions.primary.latest_node_version}"
+    ```
+
 [shopsys/framework]: https://github.com/shopsys/framework
