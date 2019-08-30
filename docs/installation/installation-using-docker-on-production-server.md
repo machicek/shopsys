@@ -35,7 +35,7 @@ Let's presume that we want to have our site running on `HTTPS` protocol and ever
 [Nginx atricle](https://www.nginx.com/blog/nginx-https-101-ssl-basics-getting-started/#HTTPS) provides us with some helpful information about the setup.
 Only thing that is missing is to connect the domain to application that runs in docker containers via port 8000 on 127.0.0.1 ip address.
 First we need to allow Nginx to connect to sockets by executing a command in shell console.
- 
+
 ```sh
 setsebool httpd_can_network_connect on -P
 ```

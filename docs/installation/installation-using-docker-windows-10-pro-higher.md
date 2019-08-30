@@ -33,7 +33,7 @@ This solution uses [*docker-sync*](http://docker-sync.io/) (for relatively fast 
 ***Note:** be aware of using custom firewalls or protection tools other than default `Windows Defender`, we experienced that some of them make synchronization malfunctioning because of blocking synchronization ports.
 To speed up the synchronization and developing faster, you can exclude folder from indexing and search path of `Windows Defender`.*
 
-#### 
+#### Prerequisites
 In settings of Windows docker check `Expose daemon on localhost:2375` in `General` tab and check drive option in `Shared Drives` tab, where the project will be installed, you will be prompted for your Windows credentials.
 
 #### Enable WSL
