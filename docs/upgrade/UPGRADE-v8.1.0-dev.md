@@ -36,6 +36,11 @@ There you can find links to upgrade notes for other versions too.
 
         COPY --chown=www-data:www-data / /var/www/html
     ```
+- update your `kubernetes/deployments/webserver-php-fpm.yml` file: ([#1368](https://github.com/shopsys/shopsys/pull/1368))
+    ```diff
+    -   command: ["sh", "-c", "cd /var/www/html && ./phing db-create dirs-create db-demo product-search-recreate-structure product-search-export-products grunt error-pages-generate warmup"]
+    +   command: ["sh", "-c", "cd /var/www/html && ./phing -D productionConfirmDestructiveAction=y db-create dirs-create db-demo product-search-recreate-structure product-search-export-products grunt error-pages-generate warmup"]
+    ```
 
 ### Tools
 - let Phing properties `is-multidomain` and `translations.dump.locales` be auto-detected ([#1309](https://github.com/shopsys/shopsys/pull/1309))

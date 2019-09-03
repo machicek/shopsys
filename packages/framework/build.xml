@@ -72,13 +72,94 @@
 
     <target name="build" depends="build-deploy-part-1-db-independent,build-deploy-part-2-db-dependent" description="Builds application for production preserving your DB."/>
 
-    <target name="build-demo" depends="wipe,build-version-generate,composer-prod,redis-check,npm,dirs-create,assets,db-demo,grunt,error-pages-generate,warmup,product-search-recreate-structure,product-search-export-products,clean-redis-old" description="Builds application for production with clean demo DB."/>
+    <target name="build-demo" depends="production-protection" description="Builds application for production with clean demo DB.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <phingcall target="wipe"/>
+                <phingcall target="build-version-generate"/>
+                <phingcall target="composer-prod"/>
+                <phingcall target="redis-check"/>
+                <phingcall target="dirs-create"/>
+                <phingcall target="assets"/>
+                <phingcall target="db-demo"/>
+                <phingcall target="grunt"/>
+                <phingcall target="error-pages-generate"/>
+                <phingcall target="warmup"/>
+                <phingcall target="product-search-recreate-structure"/>
+                <phingcall target="product-search-export-products"/>
+                <phingcall target="clean-redis-old"/>
+            </then>
+        </if>
+    </target>
 
-    <target name="build-demo-ci" depends="build-version-generate,wipe-excluding-logs,composer-dev,npm,timezones-check,dirs-create,test-dirs-create,assets,db-demo,product-search-recreate-structure,product-search-export-products,grunt,error-pages-generate,tests-acceptance-build,clean-redis-old,checks-ci" description="Builds application for development with clean demo DB and runs CI checks."/>
+    <target name="build-demo-ci" depends="production-protection" description="Builds application for development with clean demo DB and runs CI checks.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <phingcall target="build-version-generate"/>
+                <phingcall target="wipe-excluding-logs"/>
+                <phingcall target="composer-dev"/>
+                <phingcall target="npm"/>
+                <phingcall target="timezones-check"/>
+                <phingcall target="dirs-create"/>
+                <phingcall target="test-dirs-create"/>
+                <phingcall target="assets"/>
+                <phingcall target="db-demo"/>
+                <phingcall target="product-search-recreate-structure"/>
+                <phingcall target="product-search-export-products"/>
+                <phingcall target="grunt"/>
+                <phingcall target="error-pages-generate"/>
+                <phingcall target="tests-acceptance-build"/>
+                <phingcall target="clean-redis-old"/>
+                <phingcall target="checks-ci"/>
+            </then>
+        </if>
+    </target>
 
-    <target name="build-demo-dev" depends="build-version-generate,wipe-excluding-logs,composer-dev,npm,timezones-check,dirs-create,test-dirs-create,assets,db-demo,product-search-recreate-structure,product-search-export-products,grunt,error-pages-generate,tests-acceptance-build,clean-redis-old,checks-diff" description="Builds application for development with clean demo DB and runs checks on changed files."/>
+    <target name="build-demo-dev" depends="production-protection" description="Builds application for development with clean demo DB and runs checks on changed files.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <phingcall target="build-version-generate"/>
+                <phingcall target="wipe-excluding-logs"/>
+                <phingcall target="composer-dev"/>
+                <phingcall target="npm"/>
+                <phingcall target="timezones-check"/>
+                <phingcall target="dirs-create"/>
+                <phingcall target="test-dirs-create"/>
+                <phingcall target="assets"/>
+                <phingcall target="db-demo"/>
+                <phingcall target="product-search-recreate-structure"/>
+                <phingcall target="product-search-export-products"/>
+                <phingcall target="grunt"/>
+                <phingcall target="error-pages-generate"/>
+                <phingcall target="tests-acceptance-build"/>
+                <phingcall target="clean-redis-old"/>
+                <phingcall target="checks-diff"/>
+            </then>
+        </if>
+    </target>
 
-    <target name="build-demo-dev-quick" depends="build-version-generate,wipe-excluding-logs,composer-dev,npm,dirs-create,test-dirs-create,assets,db-demo,product-search-recreate-structure,product-search-export-products,grunt,clean-redis-old" description="Builds application for development with clean demo DB while skipping nonessential steps."/>
+    <target name="build-demo-dev-quick" depends="production-protection" description="Builds application for development with clean demo DB while skipping nonessential steps.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <phingcall target="build-version-generate"/>
+                <phingcall target="wipe-excluding-logs"/>
+                <phingcall target="composer-dev"/>
+                <phingcall target="npm"/>
+                <phingcall target="dirs-create"/>
+                <phingcall target="test-dirs-create"/>
+                <phingcall target="assets"/>
+                <phingcall target="db-demo"/>
+                <phingcall target="product-search-recreate-structure"/>
+                <phingcall target="product-search-export-products"/>
+                <phingcall target="grunt"/>
+                <phingcall target="clean-redis-old"/>
+            </then>
+        </if>
+    </target>
 
     <target name="build-deploy-part-1-db-independent" depends="build-version-generate,clean,composer-prod,npm,dirs-create,assets" description="First part of application build for production preserving your DB (can be run without maintenance page)."/>
 
@@ -88,7 +169,26 @@
 
     <target name="build-dev-quick" depends="build-version-generate,clean,composer-dev,npm,dirs-create,test-dirs-create,assets,db-migrations,domains-data-create,friendly-urls-generate,domains-urls-replace,product-search-migrate-structure,grunt,clean-redis-old" description="Builds application for development preserving your DB while skipping nonessential steps."/>
 
-    <target name="build-new" depends="wipe,build-version-generate,composer-prod,redis-check,npm,dirs-create,assets,db-rebuild,grunt,error-pages-generate,warmup,product-search-recreate-structure,clean-redis-old" description="Builds application for production with clean DB (with base data only)."/>
+    <target name="build-new" depends="production-protection" description="Builds application for production with clean DB (with base data only).">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <phingcall target="wipe"/>
+                <phingcall target="build-version-generate"/>
+                <phingcall target="composer-prod"/>
+                <phingcall target="redis-check"/>
+                <phingcall target="npm"/>
+                <phingcall target="dirs-create"/>
+                <phingcall target="assets"/>
+                <phingcall target="db-rebuild"/>
+                <phingcall target="grunt"/>
+                <phingcall target="error-pages-generate"/>
+                <phingcall target="warmup"/>
+                <phingcall target="product-search-recreate-structure"/>
+                <phingcall target="clean-redis-old"/>
+            </then>
+        </if>
+    </target>
 
     <target name="build-version-generate" description="Generates parameters_version.yml config file with a new build version number.">
         <exec executable="${path.php.executable}" checkreturn="true" outputProperty="version">
@@ -206,26 +306,50 @@
         </exec>
     </target>
 
-    <target name="db-create" description="Creates database for application with required configuration.">
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="shopsys:database:create"/>
-        </exec>
+    <target name="db-create" depends="production-protection" description="Creates database for application with required configuration.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+                    <arg value="${path.bin-console}"/>
+                    <arg value="shopsys:database:create"/>
+                </exec>
+            </then>
+        </if>
     </target>
 
-    <target name="db-demo" depends="db-wipe-public-schema,db-import-basic-structure,db-migrations,domains-data-create,db-fixtures-demo,plugin-demo-data-load,friendly-urls-generate,domains-urls-replace" description="Creates DB and fills it with demo data"/>
+    <target name="db-demo" depends="production-protection" description="Creates DB and fills it with demo data">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <phingcall target="db-wipe-public-schema"/>
+                <phingcall target="db-import-basic-structure"/>
+                <phingcall target="db-migrations"/>
+                <phingcall target="domains-data-create"/>
+                <phingcall target="db-fixtures-demo"/>
+                <phingcall target="plugin-demo-data-load"/>
+                <phingcall target="friendly-urls-generate"/>
+                <phingcall target="domains-urls-replace"/>
+            </then>
+        </if>
+    </target>
 
     <target name="db-fixtures-demo" description="Loads demo data fixtures." hidden="true">
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="doctrine:fixtures:load"/>
-            <arg value="--append"/>
-            <arg value="--no-interaction"/>
-        </exec>
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="shopsys:recalculations"/>
-        </exec>
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+                    <arg value="${path.bin-console}"/>
+                    <arg value="doctrine:fixtures:load"/>
+                    <arg value="--append"/>
+                    <arg value="--no-interaction"/>
+                </exec>
+                <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+                    <arg value="${path.bin-console}"/>
+                    <arg value="shopsys:recalculations"/>
+                </exec>
+            </then>
+        </if>
     </target>
 
     <target name="db-import-basic-structure" description="Imports basic database structure (without migrations)." hidden="true">
@@ -256,17 +380,34 @@
         </exec>
     </target>
 
-    <target name="db-rebuild" depends="db-wipe-public-schema,db-import-basic-structure,db-migrations,domains-data-create,friendly-urls-generate,domains-urls-replace" description="Drops all data in database and creates a new one with base data only."/>
+    <target name="db-rebuild" depends="production-protection" description="Drops all data in database and creates a new one with base data only.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <phingcall target="db-wipe-public-schema"/>
+                <phingcall target="db-import-basic-structure"/>
+                <phingcall target="db-migrations"/>
+                <phingcall target="domains-data-create"/>
+                <phingcall target="friendly-urls-generate"/>
+                <phingcall target="domains-urls-replace"/>
+            </then>
+        </if>
+    </target>
 
-    <target name="db-wipe-public-schema" description="Drops and creates public database schema." hidden="true">
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="shopsys:schema:drop"/>
-        </exec>
-        <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
-            <arg value="${path.bin-console}"/>
-            <arg value="shopsys:schema:create"/>
-        </exec>
+    <target name="db-wipe-public-schema" depends="production-protection" description="Drops and creates public database schema." hidden="true">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+                    <arg value="${path.bin-console}"/>
+                    <arg value="shopsys:schema:drop"/>
+                </exec>
+                <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
+                    <arg value="${path.bin-console}"/>
+                    <arg value="shopsys:schema:create"/>
+                </exec>
+            </then>
+        </if>
     </target>
 
     <target name="diff-files" description="Finds changed files (against origin/master) and saves them into properties." hidden="true">
@@ -488,6 +629,17 @@
         </exec>
     </target>
 
+    <target name="environment-load" description="Load Symfony environment into Phing properties." hidden="true">
+        <if>
+            <not><isset property="environment"/></not>
+            <then>
+                <exec command="php bin/console about | grep Environment | sed 's/Environment//;s/ //g'" outputProperty="environment"/>
+
+                <property name="environment" value="${environment}"/>
+            </then>
+        </if>
+    </target>
+
     <target name="error-pages-generate" depends="prod-warmup,redis-check" description="Generates error pages displayed in production environment.">
         <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
             <arg value="${path.bin-console}"/>
@@ -679,6 +831,23 @@
 
     <target name="product-search-recreate-structure" depends="product-search-delete-structure,product-search-create-structure" description="Recreates structure for searching via elasticsearch (deletes existing structure and creates new one)"/>
 
+    <target name="production-protection" depends="environment-load" description="Asks user if wants to run desctructive actions in production environemnt" hidden="true">
+        <if>
+            <and>
+                <not><isset property="productionConfirmDestructiveAction"/></not>
+                <and>
+                    <equals arg1="${environment}" arg2="prod"/>
+                </and>
+            </and>
+            <then>
+                <input propertyName="productionConfirmDestructiveAction" validArgs="y,n" defaultValue="n" message="Warning! You are now in production environment and performing destructive action! Are you sure you want to continue?"/>
+            </then>
+            <else>
+                <property name="productionConfirmDestructiveAction" value="y"/>
+            </else>
+        </if>
+    </target>
+
     <target name="redis-check" description="Checks availability of Redis" hidden="true">
         <exec executable="${path.php.executable}" passthru="true" checkreturn="true">
             <arg value="${path.bin-console}"/>
@@ -861,7 +1030,19 @@
 
     <target name="test-product-search-recreate-structure" depends="test-product-search-delete-structure,test-product-search-create-structure" description="Recreates structure for searching via elasticsearch in test environment (deletes existing structure and creates new one)"/>
 
-    <target name="tests" depends="test-db-demo,test-product-search-recreate-structure,test-product-search-export-products,tests-unit,tests-functional,tests-smoke" description="Runs unit, functional and smoke tests. Builds new test database in the process."/>
+    <target name="tests" depends="production-protection" description="Runs unit, functional and smoke tests. Builds new test database in the process.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <phingcall target="test-db-demo"/>
+                <phingcall target="test-product-search-recreate-structure"/>
+                <phingcall target="test-product-search-export-products"/>
+                <phingcall target="tests-unit"/>
+                <phingcall target="tests-functional"/>
+                <phingcall target="tests-smoke"/>
+            </then>
+        </if>
+    </target>
 
     <target name="tests-acceptance" depends="clean,clean-redis,test-db-dump" description="Runs acceptance tests. Running Selenium server is required (Selenium is always running in Docker setup).">
         <available file="${path.env.test}" type="file" property="path.env.test.existed"/>
@@ -901,47 +1082,70 @@
         </exec>
     </target>
 
-    <target name="tests-functional" depends="clean,clean-redis,domains-info-load" description="Runs functional tests.">
+    <target name="tests-functional" depends="production-protection,clean,clean-redis,domains-info-load" description="Runs functional tests.">
         <if>
-            <istrue value="${domains-info.is-multidomain}"/>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <if>
+                    <istrue value="${domains-info.is-multidomain}"/>
+                    <then>
+                        <exec executable="${path.phpunit.executable}" logoutput="true" passthru="true" checkreturn="true">
+                            <arg value="--colors=always"/>
+                            <arg value="--testsuite"/>
+                            <arg value="Functional"/>
+                            <arg value="--exclude-group"/>
+                            <arg value="singledomain"/>
+                            <arg value="--configuration"/>
+                            <arg value="${path.root}/phpunit.xml"/>
+                        </exec>
+                    </then>
+                    <else>
+                        <exec executable="${path.phpunit.executable}" logoutput="true" passthru="true" checkreturn="true">
+                            <arg value="--colors=always"/>
+                            <arg value="--testsuite"/>
+                            <arg value="Functional"/>
+                            <arg value="--exclude-group"/>
+                            <arg value="multidomain"/>
+                            <arg value="--configuration"/>
+                            <arg value="${path.root}/phpunit.xml"/>
+                        </exec>
+                    </else>
+                </if>
+            </then>
+        </if>
+    </target>
+
+    <target name="tests-performance" depends="production-protection,clean,clean-redis" description="Runs performance tests (assuming test DB has been filled with performance data and warmed up, see 'tests-performance-run').">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
             <then>
                 <exec executable="${path.phpunit.executable}" logoutput="true" passthru="true" checkreturn="true">
                     <arg value="--colors=always"/>
                     <arg value="--testsuite"/>
-                    <arg value="Functional"/>
+                    <arg value="Performance"/>
                     <arg value="--exclude-group"/>
-                    <arg value="singledomain"/>
+                    <arg value="warmup"/>
                     <arg value="--configuration"/>
                     <arg value="${path.root}/phpunit.xml"/>
                 </exec>
             </then>
-            <else>
-                <exec executable="${path.phpunit.executable}" logoutput="true" passthru="true" checkreturn="true">
-                    <arg value="--colors=always"/>
-                    <arg value="--testsuite"/>
-                    <arg value="Functional"/>
-                    <arg value="--exclude-group"/>
-                    <arg value="multidomain"/>
-                    <arg value="--configuration"/>
-                    <arg value="${path.root}/phpunit.xml"/>
-                </exec>
-            </else>
         </if>
     </target>
 
-    <target name="tests-performance" depends="clean,clean-redis" description="Runs performance tests (assuming test DB has been filled with performance data and warmed up, see 'tests-performance-run').">
-        <exec executable="${path.phpunit.executable}" logoutput="true" passthru="true" checkreturn="true">
-            <arg value="--colors=always"/>
-            <arg value="--testsuite"/>
-            <arg value="Performance"/>
-            <arg value="--exclude-group"/>
-            <arg value="warmup"/>
-            <arg value="--configuration"/>
-            <arg value="${path.root}/phpunit.xml"/>
-        </exec>
+    <target name="tests-performance-run" depends="production-protection" description="Runs performance tests. Builds new test database with performance data in the process.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <phingcall target="clean"/>
+                <phingcall target="clean-redis"/>
+                <phingcall target="test-db-performance"/>
+                <phingcall target="test-product-search-recreate-structure"/>
+                <phingcall target="test-product-search-export-products"/>
+                <phingcall target="tests-performance-warmup"/>
+                <phingcall target="tests-performance"/>
+            </then>
+        </if>
     </target>
-
-    <target name="tests-performance-run" depends="clean,clean-redis,test-db-performance,test-product-search-recreate-structure,test-product-search-export-products,tests-performance-warmup,tests-performance" description="Runs performance tests. Builds new test database with performance data in the process."/>
 
     <target name="tests-performance-warmup" description="Warms up cache for performance tests.">
         <exec executable="${path.phpunit.executable}" logoutput="true" passthru="true" checkreturn="true">
@@ -1045,36 +1249,46 @@
         </exec>
     </target>
 
-    <target name="wipe" depends="wipe-excluding-logs" description="Wipes out all generated and/or uploaded files.">
-        <delete failonerror="false" includeemptydirs="true">
-            <fileset dir="${path.var}/logs/"/>
-        </delete>
+    <target name="wipe" depends="production-protection,wipe-excluding-logs" description="Wipes out all generated and/or uploaded files.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <delete failonerror="false" includeemptydirs="true">
+                    <fileset dir="${path.var}/logs/"/>
+                </delete>
+            </then>
+        </if>
     </target>
 
-    <target name="wipe-excluding-logs" depends="clean,clean-styles" description="Wipes out all generated and/or uploaded files except for logs.">
-        <delete failonerror="false" includeemptydirs="true">
-            <fileset dir="${path.var}/">
-                <exclude name=".gitkeep"/>
-                <exclude name="logs/**"/>
-                <exclude name="postgres-data/**"/>
-                <exclude name="elasticsearch-data/**"/>
-            </fileset>
-            <fileset dir="${path.build.stats}/">
-                <exclude name="/"/>
-            </fileset>
-            <fileset dir="${path.root}/docs/generated/">
-                <exclude name="/"/>
-            </fileset>
-            <fileset dir="${path.web}/components/">
-                <exclude name="/"/>
-            </fileset>
-            <fileset dir="${path.web}/content/">
-                <exclude name="/"/>
-            </fileset>
-            <fileset dir="${path.web}/content-test/">
-                <exclude name="/"/>
-            </fileset>
-        </delete>
+    <target name="wipe-excluding-logs" depends="production-protection,clean,clean-styles" description="Wipes out all generated and/or uploaded files except for logs.">
+        <if>
+            <equals arg1="${productionConfirmDestructiveAction}" arg2="y"/>
+            <then>
+                <delete failonerror="false" includeemptydirs="true">
+                    <fileset dir="${path.var}/">
+                        <exclude name=".gitkeep"/>
+                        <exclude name="logs/**"/>
+                        <exclude name="postgres-data/**"/>
+                        <exclude name="elasticsearch-data/**"/>
+                    </fileset>
+                    <fileset dir="${path.build.stats}/">
+                        <exclude name="/"/>
+                    </fileset>
+                    <fileset dir="${path.root}/docs/generated/">
+                        <exclude name="/"/>
+                    </fileset>
+                    <fileset dir="${path.web}/components/">
+                        <exclude name="/"/>
+                    </fileset>
+                    <fileset dir="${path.web}/content/">
+                        <exclude name="/"/>
+                    </fileset>
+                    <fileset dir="${path.web}/content-test/">
+                        <exclude name="/"/>
+                    </fileset>
+                </delete>
+            </then>
+        </if>
     </target>
 
     <target name="yaml-lint" description="Checks syntax of Yaml files." hidden="true">
